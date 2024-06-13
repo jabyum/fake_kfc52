@@ -56,6 +56,10 @@ def get_location(message, name, number):
         bot.send_message(user_id, "Отправьте свою локацию через кнопку",
                          reply_markup=bt.location_bt())
         bot.register_next_step_handler(message, get_location, name, number)
+@bot.message_handler(content_types=["text"])
+def main_menu(message):
+    user_id = message.from_user.id
+
 
 
 bot.infinity_polling()
