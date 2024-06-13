@@ -61,6 +61,15 @@ def get_location(message, name, number):
         bot.send_message(user_id, "Отправьте свою локацию через кнопку",
                          reply_markup=bt.location_bt())
         bot.register_next_step_handler(message, get_location, name, number)
+@bot.callback_query_handler(lambda call: call.data in ["main_menu", "cart"])
+def all_calls(call):
+    user_id = call.message.chat.id
+    if call.data == "main_menu":
+        bot.delete_message(user_id, call.message.message_id)
+        bot.send_message(user_id, "Выберите действие", reply_markup=bt.main_menu_kb())
+    elif call.data == "cart":
+        bot.send_message(user_id, "ваша корзина")
+
 @bot.callback_query_handler(lambda call: "prod_" in call.data)
 def product_call(call):
     user_id = call.message.chat.id
@@ -70,6 +79,7 @@ def product_call(call):
     bot.send_photo(user_id, photo=product_info[3], caption=f"{product_info[0]}\n\n"
                                                            f"Описание: {product_info[2]}\n"
                                                            f"Цена: {product_info[1]} сум")
+
 
 @bot.message_handler(content_types=["text"])
 def main_menu(message):
