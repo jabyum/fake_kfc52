@@ -64,6 +64,12 @@ def get_location(message, name, number):
 @bot.callback_query_handler(lambda call: "prod_" in call.data)
 def product_call(call):
     user_id = call.message.chat.id
+    bot.delete_message(user_id, call.message.message_id)
+    product_id = int(call.data.replace("prod_", ""))
+    product_info = db.get_exact_product(product_id)
+    bot.send_photo(user_id, photo=product_info[3], caption=f"{product_info[0]}\n\n"
+                                                           f"Описание: {product_info[2]}\n"
+                                                           f"Цена: {product_info[1]} сум")
 
 @bot.message_handler(content_types=["text"])
 def main_menu(message):
