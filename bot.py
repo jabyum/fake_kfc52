@@ -4,9 +4,11 @@ import database as db
 # создаем объект бота
 bot = telebot.TeleBot(token="7349504840:AAH9LF1Y0EqTsqR0S6zz6T54KRKiwbp0JAo")
 
-db.add_product(pr_name="Бургер", pr_desc="лучший", pr_price=50000, pr_quantity=10, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/799220868-skandinavskij-burger-600x600.png")
-db.add_product(pr_name="Чизбургер", pr_desc="лучший чизбургер", pr_price=60000, pr_quantity=10, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/348457690-chizburger-600x600.jpg")
-db.add_product(pr_name="Чизбургер2", pr_desc="лучший чизбургер2", pr_price=60000, pr_quantity=0, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/348457690-chizburger-600x600.jpg")
+# db.add_product(pr_name="Бургер Биг", pr_desc="лучший", pr_price=50000, pr_quantity=10, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/799220868-skandinavskij-burger-600x600.png")
+# db.add_product(pr_name="Чизбургер Биг", pr_desc="лучший чизбургер", pr_price=60000, pr_quantity=10, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/348457690-chizburger-600x600.jpg")
+# db.add_product(pr_name="Чизбургер2", pr_desc="лучший чизбургер2", pr_price=60000, pr_quantity=0, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/348457690-chizburger-600x600.jpg")
+
+print(db.get_all_product())
 # обработка команды /start
 @bot.message_handler(commands=["start"])
 def start(message):
@@ -59,6 +61,10 @@ def get_location(message, name, number):
         bot.send_message(user_id, "Отправьте свою локацию через кнопку",
                          reply_markup=bt.location_bt())
         bot.register_next_step_handler(message, get_location, name, number)
+@bot.callback_query_handler(lambda call: "prod_" in call.data)
+def product_call(call):
+    user_id = call.message.chat.id
+
 @bot.message_handler(content_types=["text"])
 def main_menu(message):
     user_id = message.from_user.id

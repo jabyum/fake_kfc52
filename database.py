@@ -44,6 +44,7 @@ def add_product(pr_name, pr_price, pr_desc, pr_quantity, pr_photo):
     sql.execute("INSERT INTO products (pr_name, pr_price, pr_desc, pr_quantity, pr_photo, reg_date) "
                 "VALUES (?, ?, ?, ?, ?, ?);", (pr_name, pr_price, pr_desc, pr_quantity, pr_photo,
                                                datetime.now()))
+    connection.commit()
 def  get_all_product():
     connection = sqlite3.connect("kfc.db")
     sql = connection.cursor()
