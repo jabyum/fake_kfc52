@@ -15,3 +15,11 @@ def location_bt():
                                   request_location=True)
     kb.add(button)
     return kb
+def main_menu_kb():
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    products = types.KeyboardButton(text="🍴Меню")
+    cart = types.KeyboardButton(text="🛒Корзина")
+    feedback = types.KeyboardButton(text="✒️Оставить отзыв")
+    kb.add(products, cart, feedback)
+    return kb
+

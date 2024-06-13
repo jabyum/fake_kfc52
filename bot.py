@@ -1,5 +1,6 @@
 import telebot
 import buttons as bt
+import database as db
 # создаем объект бота
 bot = telebot.TeleBot(token="7349504840:AAH9LF1Y0EqTsqR0S6zz6T54KRKiwbp0JAo")
 
@@ -7,11 +8,15 @@ bot = telebot.TeleBot(token="7349504840:AAH9LF1Y0EqTsqR0S6zz6T54KRKiwbp0JAo")
 @bot.message_handler(commands=["start"])
 def start(message):
     user_id = message.from_user.id
-    bot.send_message(user_id, "Здравствуйте! Это бот доставки.\n"
-                              "Пожалуйста, напишите своё имя")
-    # указываю следующий этап после старта (функция,
-    # которая должна сработать после обработки /start)
-    bot.register_next_step_handler(message, get_name)
+    checker = db.check_user(user_id)
+    if checker == True:
+        bot.send_message(user_id, "Выберите действие", reply_markup=bt.main_menu_kb())
+    elif checker == False:
+        bot.send_message(user_id, "Здравствуйте! Это бот доставки.\n"
+                                  "Пожалуйста, напишите своё имя")
+        # указываю следующий этап после старта (функция,
+        # которая должна сработать после обработки /start)
+        bot.register_next_step_handler(message, get_name)
 
 
 def get_name(message):
@@ -44,7 +49,9 @@ def get_location(message, name, number):
         bot.send_message(user_id, f"Вы успешно прошли регистрацию. Ваши данные:\n"
                                   f"Имя: {name}\n"
                                   f"Номер: {number}\n"
-                                  f"Локация: {location}")
+                                  f"Локация: {location}\n"
+                                  f"Выберите действие", reply_markup=bt.main_menu_kb())
+        db.add_user(user_id, name, number)
     else:
         bot.send_message(user_id, "Отправьте свою локацию через кнопку",
                          reply_markup=bt.location_bt())
