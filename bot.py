@@ -61,7 +61,8 @@ def main_menu(message):
     user_id = message.from_user.id
     text = message.text
     if text == "🍴Меню":
-        bot.send_message(user_id, "Выберите продукт")
+        all_products = db.get_pr_id_name()
+        bot.send_message(user_id, "Выберите продукт", reply_markup=bt.products_in(all_products))
     elif text == "🛒Корзина":
         bot.send_message(user_id, "Ваша корзина")
     elif text == "✒️Оставить отзыв":
