@@ -3,7 +3,7 @@ import buttons as bt
 import database as db
 # создаем объект бота
 bot = telebot.TeleBot(token="7349504840:AAH9LF1Y0EqTsqR0S6zz6T54KRKiwbp0JAo")
-
+users = {}
 # db.add_product(pr_name="Бургер Биг", pr_desc="лучший", pr_price=50000, pr_quantity=10, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/799220868-skandinavskij-burger-600x600.png")
 # db.add_product(pr_name="Чизбургер Биг", pr_desc="лучший чизбургер", pr_price=60000, pr_quantity=10, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/348457690-chizburger-600x600.jpg")
 # db.add_product(pr_name="Чизбургер2", pr_desc="лучший чизбургер2", pr_price=60000, pr_quantity=0, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/348457690-chizburger-600x600.jpg")
@@ -78,6 +78,7 @@ def product_call(call):
     bot.delete_message(user_id, call.message.message_id)
     product_id = int(call.data.replace("prod_", ""))
     product_info = db.get_exact_product(product_id)
+    users[user_id] = {"pr_id": product_id, "pr_name": product_info[0], "pr_count": 1, "pr_price": product_info[1]}
     bot.send_photo(user_id, photo=product_info[3], caption=f"{product_info[0]}\n\n"
                                                            f"Описание: {product_info[2]}\n"
                                                            f"Цена: {product_info[1]} сум",
