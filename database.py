@@ -105,4 +105,10 @@ def get_cart_id_name(user_id):
     user_cart = sql.execute("SELECT pr_name, pr_id FROM cart "
                             "WHERE user_id=?;", (user_id,)).fetchall()
     return user_cart
+def get_user_cart(user_id):
+    connection = sqlite3.connect("kfc.db")
+    sql = connection.cursor()
+    user_cart = sql.execute("SELECT pr_name, pr_count, total_price FROM cart "
+                            "WHERE user_id=?;", (user_id,)).fetchall()
+    return user_cart
 

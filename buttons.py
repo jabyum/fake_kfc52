@@ -67,6 +67,3 @@ def get_cart_kb(cart):
     kb.add(clear, back, order)
     kb.add(*product)
     return kb
-
-
-
