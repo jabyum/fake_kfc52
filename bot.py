@@ -69,12 +69,15 @@ def all_calls(call):
         bot.delete_message(user_id, call.message.message_id)
         bot.send_message(user_id, "Выберите действие", reply_markup=bt.main_menu_kb())
     elif call.data == "cart":
-        user_cart = db.get_cart_id_name(user_id)
+        cart = db.get_cart_id_name(user_id)
+        user_cart = db.get_user_cart(user_id)
         full_text = f"Ваша корзина: \n\n"
         total_amount = 0
         for i in user_cart:
-
-        bot.send_message(user_id, "ваша корзина", bt.get_cart_kb(user_cart))
+            full_text += f"{i[0]} x{i[1]} = {i[2]}\n"
+            total_amount += i[2]
+        full_text += f"\n\nИтоговая сумма: {total_amount}"
+        bot.send_message(user_id, text=full_text, reply_markup=bt.get_cart_kb(cart))
     elif call.data == "plus":
         current_amount = users[user_id]["pr_count"]
         users[user_id]["pr_count"] += 1
