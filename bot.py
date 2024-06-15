@@ -62,17 +62,21 @@ def get_location(message, name, number):
                          reply_markup=bt.location_bt())
         bot.register_next_step_handler(message, get_location, name, number)
 @bot.callback_query_handler(lambda call: call.data in ["main_menu", "cart", "minus", "plus", "none",
-                                                       "back", "to_cart"])
+                                                       "back", "to_cart", "clear_cart",
+                                                       "order"])
+
 def all_calls(call):
     user_id = call.message.chat.id
     if call.data == "main_menu":
         bot.delete_message(user_id, call.message.message_id)
         bot.send_message(user_id, "Выберите действие", reply_markup=bt.main_menu_kb())
     elif call.data == "cart":
+        bot.delete_message(user_id, call.message.message_id)
         cart = db.get_cart_id_name(user_id)
         user_cart = db.get_user_cart(user_id)
         full_text = f"Ваша корзина: \n\n"
         total_amount = 0
+        print(user_cart)
         for i in user_cart:
             full_text += f"{i[0]} x{i[1]} = {i[2]}\n"
             total_amount += i[2]
@@ -108,8 +112,24 @@ def all_calls(call):
         all_products = db.get_pr_id_name()
         bot.send_message(user_id, "Продукт добавлен в корзину. Выберите продукт",
                          reply_markup=bt.products_in(all_products))
-
-
+    elif call.data == "clear_cart":
+        db.delete_user_cart(user_id)
+        bot.send_message(user_id, "Ваша корзина очищена")
+        all_products = db.get_pr_id_name()
+        bot.send_message(user_id, "Выберите продукт",
+                         reply_markup=bt.products_in(all_products))
+    elif call.data == "order":
+        bot.delete_message(user_id, call.message.message_id)
+        user_cart = db.get_user_cart(user_id)
+        full_text = f"Новый заказ от юзера {user_id} :  \n\n"
+        total_amount = 0
+        for i in user_cart:
+            full_text += f"{i[0]} x{i[1]} = {i[2]}\n"
+            total_amount += i[2]
+        full_text += f"\n\nИтоговая сумма: {total_amount}"
+        db.delete_user_cart(user_id)
+        bot.send_message(user_id, "Ваш заказ принят. Ожидайте")
+        bot.send_message(chat_id=-4281830388, text=full_text)
 
 
 
