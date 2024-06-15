@@ -98,7 +98,8 @@ def all_calls(call):
         users.pop(user_id)
         bot.delete_message(user_id, call.message.message_id)
         all_products = db.get_pr_id_name()
-        bot.send_message(user_id, "Продукт добавлен в корзину. Выберите продукт", reply_markup=bt.products_in(all_products))
+        bot.send_message(user_id, "Продукт добавлен в корзину. Выберите продукт",
+                         reply_markup=bt.products_in(all_products))
 
 
 
