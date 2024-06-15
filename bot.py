@@ -70,6 +70,24 @@ def all_calls(call):
     elif call.data == "cart":
         bot.send_message(user_id, "ваша корзина")
     elif call.data == "plus":
+        current_amount = users[user_id]["pr_count"]
+        users[user_id]["pr_count"] += 1
+        bot.edit_message_reply_markup(chat_id=user_id, message_id=call.message.message_id,
+                                      reply_markup=bt.exact_product(current_amount=current_amount,
+                                                                    plus_or_minus="plus"))
+
+    elif call.data == "minus":
+        current_amount = users[user_id]["pr_count"]
+        if current_amount > 1:
+            users[user_id]["pr_count"] -= 1
+            bot.edit_message_reply_markup(chat_id=user_id, message_id=call.message.message_id,
+                                          reply_markup=bt.exact_product(current_amount=current_amount,
+                                                                        plus_or_minus="minus"))
+        else:
+            pass
+
+
+
 
 
 @bot.callback_query_handler(lambda call: "prod_" in call.data)
