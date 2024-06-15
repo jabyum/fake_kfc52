@@ -61,7 +61,8 @@ def get_location(message, name, number):
         bot.send_message(user_id, "Отправьте свою локацию через кнопку",
                          reply_markup=bt.location_bt())
         bot.register_next_step_handler(message, get_location, name, number)
-@bot.callback_query_handler(lambda call: call.data in ["main_menu", "cart", "minus", "plus"])
+@bot.callback_query_handler(lambda call: call.data in ["main_menu", "cart", "minus", "plus", "none",
+                                                       "back", "to_cart"])
 def all_calls(call):
     user_id = call.message.chat.id
     if call.data == "main_menu":
@@ -85,6 +86,22 @@ def all_calls(call):
                                                                         plus_or_minus="minus"))
         else:
             pass
+    elif call.data == "none":
+        pass
+    elif call.data == "back":
+        bot.delete_message(user_id, call.message.message_id)
+        all_products = db.get_pr_id_name()
+        bot.send_message(user_id, "Выберите продукт", reply_markup=bt.products_in(all_products))
+    elif call.data == "to_cart":
+        db.add_to_cart(user_id, users[user_id]["pr_id"], users[user_id]["pr_name"],
+                       users[user_id]["pr_count"], users[user_id]["pr_price"])
+        users.pop(user_id)
+        bot.delete_message(user_id, call.message.message_id)
+        all_products = db.get_pr_id_name()
+        bot.send_message(user_id, "Продукт добавлен в корзину. Выберите продукт", reply_markup=bt.products_in(all_products))
+
+
+
 
 
 
