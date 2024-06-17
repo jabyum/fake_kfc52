@@ -17,22 +17,7 @@ def start(message):
     if checker == True:
         bot.send_message(user_id, "Выберите действие", reply_markup=bt.main_menu_kb())
     elif checker == False:
-        bot.send_message(user_id, "Здравствуйте! Это бот доставки.\n"
-                                  "Пожалуйста, напишите своё имя")
-        # указываю следующий этап после старта (функция,
-        # которая должна сработать после обработки /start)
-        bot.register_next_step_handler(message, get_name)
-
-
-def get_name(message):
-    user_id = message.from_user.id
-    # сохраняем имя
-    name = message.text
-    bot.send_message(user_id, "Отправьте свой номер", reply_markup=bt.phone_number_bt())
-    # отправляю пользователя в функцию получение номера и отправляю name в следующий этап
-    bot.register_next_step_handler(message, get_number,  name)
-
-def get_number(message, name):
+        bot.send_message(user_id, "Здрапdef get_number(message, name):
     user_id = message.from_user.id
     # проверяю как отправил пользователь свой номер
     if message.contact:
