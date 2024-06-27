@@ -2,7 +2,7 @@ import telebot
 import buttons as bt
 import database as db
 # создаем объект бота
-bot = telebot.TeleBot(token="7349504840:AAH9LF1Y0EqTsqR0S6zz6T54KRKiwbp0JAo")
+bot = telebot.TeleBot(token="TOKEN")
 users = {}
 # db.add_product(pr_name="Бургер Биг", pr_desc="лучший", pr_price=50000, pr_quantity=10, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/799220868-skandinavskij-burger-600x600.png")
 # db.add_product(pr_name="Чизбургер Биг", pr_desc="лучший чизбургер", pr_price=60000, pr_quantity=10, pr_photo="https://vkusnotochkamenu.ru/image/cache/catalog/photo/348457690-chizburger-600x600.jpg")
